@@ -14,11 +14,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        // this 4 lines from fresh Laravel; from Counter already not
         // \App\Models\User::factory(10)->create();
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+
+        \App\Models\Counter::factory(1)->create();
+        \App\Models\Product::factory(5)->create();
+        \App\Models\Customer::factory(5)->create();
+        \App\Models\Invoice::factory(5)->create();
+        \App\Models\InvoiceItem::factory(5)->create();
     }
 }
