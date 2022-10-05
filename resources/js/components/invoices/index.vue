@@ -1,17 +1,25 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+    import { onMounted, ref } from 'vue';
 
-let invoices = ref([]);
+    let invoices = ref([]);
+    let searchInvoice = ref([]);
 
-onMounted(async () => {
-    await getInvoices()
-});
+    onMounted(async () => {
+        await getInvoices()
+    });
 
-const getInvoices = async () => {
-    let response = await axios.get('http://lar9-invoice.loc/api/all-invoices');
-    //console.log('response: ', response.data.invoices);
-    invoices.value = response.data.invoices;
-}
+    const getInvoices = async () => {
+        let response = await axios.get('http://lar9-invoice.loc/api/all-invoices');
+        console.log('response: ', response.data.invoices);
+        invoices.value = response.data.invoices;
+    }
+
+    const search = async () => {
+        let response = await axios.get('http://lar9-invoice.loc/api/search-invoice?s='+searchInvoice.value);
+        console.log('response: ', response.data.invoices);
+        invoices.value = response.data.invoices;
+    }
+
 </script>
 
 <template>
@@ -58,7 +66,9 @@ const getInvoices = async () => {
                     </div>
                     <div class="relative">
                         <i class="table--search--input--icon fas fa-search "></i>
-                        <input class="table--search--input" type="text" placeholder="Search invoice">
+                        <input class="table--search--input" type="text" placeholder="Search invoice"
+                        v-model="searchInvoice" @keyup="search()"
+                        >
                     </div>
                 </div>
 
@@ -76,7 +86,9 @@ const getInvoices = async () => {
                     <a href="#" class="table--items--transactionId">#&nbsp;{{item.id}}</a>
                     <p>{{ item.date }}</p>
                     <p>#{{ item.number }}</p>
-                    <p>{{ item.customer_id }}</p>
+                    <p>
+                        {{ item.customer ? item.customer.firstname + ' ' + item.customer.lastname : ''}}
+                    </p>
                     <p>{{ item.due_date }}</p>
                     <p> $ {{ item.total }}</p>
                 </div>
