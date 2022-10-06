@@ -1,5 +1,8 @@
 <script setup>
     import { onMounted, ref } from 'vue';
+    import { useRouter } from 'vue-router';
+
+    const router = useRouter();
 
     let invoices = ref([]);
     let searchInvoice = ref([]);
@@ -9,15 +12,21 @@
     });
 
     const getInvoices = async () => {
-        let response = await axios.get('http://lar9-invoice.loc/api/all-invoices');
-        console.log('response: ', response.data.invoices);
+        let response = await axios.get('/api/all-invoices');
+        //console.log('response: ', response.data.invoices);
         invoices.value = response.data.invoices;
     }
 
     const search = async () => {
-        let response = await axios.get('http://lar9-invoice.loc/api/search-invoice?s='+searchInvoice.value);
-        console.log('response: ', response.data.invoices);
+        let response = await axios.get('/api/search-invoice?s='+searchInvoice.value);
+        //console.log('response: ', response.data.invoices);
         invoices.value = response.data.invoices;
+    }
+
+    const newInvoice = async () => {
+        let form = await axios.get('/api/create-invoice');
+        //console.log('form - ',form.data);
+        await router.push('/invoice/new');
     }
 
 </script>
@@ -31,7 +40,7 @@
                     <h2 class="invoice__title">Invoices</h2>
                 </div>
                 <div>
-                    <a class="btn btn-secondary">
+                    <a class="btn btn-secondary" @click="newInvoice()">
                         New Invoice
                     </a>
                 </div>
