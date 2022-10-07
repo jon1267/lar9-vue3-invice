@@ -42,21 +42,22 @@
                 <div class="card__content--header">
                     <div>
                         <p class="my-1">Customer</p>
-                        <select name="" id="" class="input">
-                            <option value="">cust 1</option>
+                        <select name="" id="" class="input" v-model="customer_id">
+                            <option value="Select customer" disabled>Select customer</option>
+                            <option :value="customer.id" v-for="customer in allCustomers" :key="customer.id">{{customer.firstname+' '+customer.lastname}}</option>
                         </select>
                     </div>
                     <div>
                         <p class="my-1">Date</p>
-                        <input id="date" placeholder="dd-mm-yyyy" type="date" class="input"> <!---->
+                        <input id="date" placeholder="dd-mm-yyyy" type="date" class="input" v-model="form.date"> <!---->
                         <p class="my-1">Due Date</p>
-                        <input id="due_date" type="date" class="input">
+                        <input id="due_date" type="date" class="input" v-model="form.due_date">
                     </div>
                     <div>
                         <p class="my-1">Numero</p>
-                        <input type="text" class="input">
+                        <input type="text" class="input" v-model="form.number">
                         <p class="my-1">Reference(Optional)</p>
-                        <input type="text" class="input">
+                        <input type="text" class="input" v-model="form.reference">
                     </div>
                 </div>
                 <br><br>
