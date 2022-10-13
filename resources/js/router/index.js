@@ -1,8 +1,9 @@
-import { createRouter, createWebHashHistory } from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 
 import InvoiceIndex from '../components/invoices/index.vue';
 import NewInvoice   from '../components/invoices/NewInvoice.vue';
-import notFound from '../components/notFound.vue';
+import ShowInvoice  from '../components/invoices/ShowInvoice.vue';
+import notFound     from '../components/notFound.vue';
 
 const routes = [
     {
@@ -14,13 +15,18 @@ const routes = [
         component: NewInvoice
     },
     {
+        path: '/invoice/show/:id',
+        component: ShowInvoice,
+        props: true
+    },
+    {
         path: '/:pathMatch(.*)*',
         component: notFound
     }
 ];
 
 const router = createRouter({
-    history: createWebHashHistory(), //history: createWebHashHistory(process.env.BASE_URL),//error on process.env.BASE_URL
+    history: createWebHistory('/'), //history: createWebHashHistory(process.env.BASE_URL),//error on process.env.BASE_URL
     routes,
 });
 

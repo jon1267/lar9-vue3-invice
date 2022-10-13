@@ -84,7 +84,7 @@
             total = Total();
 
             const formData = {} //new FormData(); formData.append() not work. xz?.
-            formData.invoice_item = JSON.stringify(listCart.value);
+            formData.invoice_items = JSON.stringify(listCart.value);
             formData.customer_id = customer_id.value;
             formData.date = form.value.date;
             formData.due_date = form.value.due_date;
@@ -94,11 +94,11 @@
             formData.subtotal = subtotal;
             formData.total = total;
             formData.terms_and_conditions = form.value.terms_and_conditions;
-            console.log(formData);
+            //console.log(formData);
 
-            //axios.post('/api/add-invoice', formData);
-            //listCart.value = [];
-            //router.push('/');
+            axios.post('/api/save-invoice', formData);
+            listCart.value = [];
+            router.push('/');
         }
 
     }
@@ -115,7 +115,9 @@
                     <h2 class="invoice__title">New Invoice</h2>
                 </div>
                 <div>
-
+                    <a class="btn btn-secondary" @click="onSave()">
+                        Save
+                    </a>
                 </div>
             </div>
 
@@ -202,9 +204,9 @@
 
                 </div>
                 <div>
-                    <button class="btn btn-secondary" @click="onSave()">
+                    <a class="btn btn-secondary" @click="onSave()">
                         Save
-                    </button>
+                    </a>
                 </div>
             </div>
 
