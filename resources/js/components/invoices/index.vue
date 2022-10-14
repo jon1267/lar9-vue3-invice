@@ -30,7 +30,7 @@
     }
 
     const onShow = async (id) => {
-        await router.push('/invoice/show/'+id)
+        await router.push(`/invoice/show/${id}`)
     }
 
 </script>

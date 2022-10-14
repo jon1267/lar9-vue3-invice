@@ -1,4 +1,24 @@
 <script setup>
+    import { onMounted, ref } from 'vue';
+
+    let form = ref({ id: ''});
+
+    const props = defineProps({
+        id: {
+            type: String,
+            default: ''
+        }
+    });
+
+    onMounted(async () => {
+        await getInvoice();
+    });
+
+    const getInvoice = async () => {
+        let response = await axios.get(`/api/show-invoice/${props.id}`);
+        console.log('form', response.data.invoice);
+        form.value = response.data.invoice;
+    }
 
 </script>
 
@@ -17,8 +37,8 @@
             </div>
             <div>
                 <div class="card__header--title ">
-                    <h1 class="mr-2">#1043</h1>
-                    <p>July 17, 2020 at 3:28 am </p>
+                    <h1 class="mr-2">#{{ form.id }}</h1>
+                    <p>{{ form.created_at }}</p>
                 </div>
 
                 <div>
@@ -66,24 +86,24 @@
                 <div class="invoice__header--item">
                     <div>
                         <h2>Invoice To:</h2>
-                        <p>Customer 1</p>
+                        <p v-if="form.customer">{{ form.customer.firstname }}</p>
                     </div>
                     <div>
                         <div class="invoice__header--item1">
                             <p>Invoice#</p>
-                            <span>#1200</span>
+                            <span>#{{ form.number }}</span>
                         </div>
                         <div class="invoice__header--item2">
                             <p>Date</p>
-                            <span>12/12/2022</span>
+                            <span>{{ form.date }}</span>
                         </div>
                         <div class="invoice__header--item2">
                             <p>Due Date</p>
-                            <span>12/12/2022</span>
+                            <span>{{ form.date }}</span>
                         </div>
                         <div class="invoice__header--item2">
                             <p>Reference</p>
-                            <span>1045</span>
+                            <span>{{ form.reference }}</span>
                         </div>
 
                     </div>
