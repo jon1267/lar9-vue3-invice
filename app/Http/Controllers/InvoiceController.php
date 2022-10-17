@@ -96,7 +96,7 @@ class InvoiceController extends Controller
 
     public function showInvoice($id)
     {
-        $invoice = Invoice::with(['customer', 'invoice_items'])->findOrFail($id);
+        $invoice = Invoice::with(['customer', 'invoice_items.product'])->findOrFail($id);
 
         return response()->json(['invoice' => $invoice], 200);
     }
