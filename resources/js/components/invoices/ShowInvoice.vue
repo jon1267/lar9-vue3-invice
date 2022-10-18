@@ -27,6 +27,7 @@
     }
 
     const onEdit = (id) => {
+        console.log(id);
         router.push(`/invoice/edit/${id}`)
     }
 
@@ -63,7 +64,7 @@
                         </li>
                         <li>
                             <!-- Select Btn Option -->
-                            <button class="selectBtnFlat">
+                            <button class="selectBtnFlat" @click="onEdit(form.id)">
                                 <i class=" fas fa-reply"></i>
                                 Edit
                             </button>

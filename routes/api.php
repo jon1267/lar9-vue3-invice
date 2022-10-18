@@ -18,3 +18,4 @@ Route::get('/customers', [CustomerController::class, 'customers']);
 Route::get('/products', [ProductController::class, 'products']);
 Route::post('/save-invoice', [InvoiceController::class, 'saveInvoice']);
 Route::get('/show-invoice/{id}', [InvoiceController::class, 'showInvoice']);
+Route::get('/edit-invoice/{id}', [InvoiceController::class, 'editInvoice']);

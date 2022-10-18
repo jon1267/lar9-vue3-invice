@@ -101,4 +101,11 @@ class InvoiceController extends Controller
         return response()->json(['invoice' => $invoice], 200);
     }
 
+    public function editInvoice($id)
+    {
+        $invoice = Invoice::with(['customer', 'invoice_items.product'])->findOrFail($id);
+
+        return response()->json(['invoice' => $invoice], 200);
+    }
+
 }
