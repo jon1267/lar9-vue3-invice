@@ -9,6 +9,9 @@
 
     let allCustomers = ref([]);
     let customer_id = ref([]);
+    const showModal = ref(false);
+    const hideModal = ref(true);
+    let listProducts = ref([]);
 
     const props = defineProps({
         id: {
@@ -20,6 +23,7 @@
     onMounted(async () => {
         await getInvoice();
         await getAllCustomers();
+        await getProducts();
     });
 
     const getInvoice = async () => {
@@ -33,6 +37,28 @@
         //console.log('getAllCustomers response - ', response.data.customers );
         allCustomers.value = response.data.customers;
     }
+
+    const deleteInvoiceItem = (id, i) => {
+        form.value.invoice_items.splice(i,1);
+        if (id != undefined ) {
+            axios.get(`/api/delete-invoice-items/${id}`);
+        }
+    }
+
+    const closeModal = () => {
+        showModal.value = !hideModal.value;
+    }
+
+    const openModal = () => {
+        showModal.value = !showModal.value;
+    }
+
+    const getProducts = async () => {
+        let response = await axios.get('/api/products');
+        //console.log('Products - ', response.data.products);
+        listProducts.value = response.data.products;
+    }
+
 
 </script>
 
@@ -83,23 +109,30 @@
                     </div>
 
                     <!-- item 1 -->
-                    <div class="table--items2">
-                        <p>#093654 vjxhchkvhxc vkxckvjkxc jkvjxckvjkx </p>
+                    <div class="table--items2" v-for="(itemcart, i) in form.invoice_items" :key="itemcart.id">
+                        <p v-if="itemcart.product">
+                            #{{ itemcart.product.item_code }} {{ itemcart.product.description }}
+                        </p>
+                        <!-- ??? itemcart.item_code not undefined -->
+                        <p v-else>
+                            #{{ itemcart.item_code }} {{ itemcart.description }}
+                        </p>
+
                         <p>
-                            <input type="text" class="input" >
+                            <input type="text" class="input" v-model="itemcart.unit_price" >
                         </p>
                         <p>
-                            <input type="text" class="input" >
+                            <input type="text" class="input" v-model="itemcart.quantity">
                         </p>
                         <p>
-                            $ 10000
+                            $ {{ itemcart.unit_price * itemcart.quantity }}
                         </p>
-                        <p style="color: red; font-size: 24px;cursor: pointer;">
+                        <p style="color: red; font-size: 24px;cursor: pointer;" @click="deleteInvoiceItem(itemcart.id, i)">
                             &times;
                         </p>
                     </div>
                     <div style="padding: 10px 30px !important;">
-                        <button class="btn btn-sm btn__open--modal">Add New Line</button>
+                        <button class="btn btn-sm btn__open--modal" @click="openModal()">Add New Line</button>
                     </div>
                 </div>
 
@@ -139,20 +172,27 @@
 
         </div>
         <!--==================== add modal items ====================-->
-        <div class="modal main__modal ">
+        <div class="modal main__modal " :class="{ show: showModal }">
             <div class="modal__content">
-                <span class="modal__close btn__close--modal">×</span>
+                <span class="modal__close btn__close--modal" @click="closeModal()">×</span>
                 <h3 class="modal__title">Add Item</h3>
                 <hr><br>
                 <div class="modal__items">
-                    <select class="input my-1">
-                        <option value="None">None</option>
-                        <option value="None">LBC Padala</option>
-                    </select>
+                    <ul style="list-style: none;">
+                        <li v-for="(item, i) in listProducts" :key="item.id"
+                            style="display: grid; grid-template-columns: 30px 300px 15px; align-items: center; padding-bottom: 5px;">
+                            <p>{{i+1}}</p>
+                            <a href="#">{{item.item_code}} {{item.description}}</a>
+
+                            <button @click="addCart(item)"
+                                style="border: 1px solid #e0e0e0;width: 35px;height: 35px; cursor: pointer;">
+                            + </button>
+                        </li>
+                    </ul>
                 </div>
                 <br><hr>
                 <div class="model__footer">
-                    <button class="btn btn-light mr-2 btn__close--modal">
+                    <button class="btn btn-light mr-2 btn__close--modal" @click="closeModal()">
                         Cancel
                     </button>
                     <button class="btn btn-light btn__close--modal ">Save</button>

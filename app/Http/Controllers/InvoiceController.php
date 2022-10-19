@@ -108,4 +108,10 @@ class InvoiceController extends Controller
         return response()->json(['invoice' => $invoice], 200);
     }
 
+    public function deleteInvoiceItems($id)
+    {
+        $invoiceItem = InvoiceItem::findOrFail($id);
+        $invoiceItem->delete();
+    }
+
 }
