@@ -1,7 +1,8 @@
 <script setup>
-    import axios from 'axios';
     import { onMounted, ref } from 'vue';
-    import router from "../../router";
+    import { useRouter } from 'vue-router';
+
+    const router = useRouter();
 
     let form = ref([]);
     let allCustomers = ref([]);

@@ -1,7 +1,8 @@
 <script setup>
     import { onMounted, ref } from 'vue';
-    import axios from "axios";
-    //import router from "../../router";
+    import { useRouter } from 'vue-router';
+
+    const router = useRouter();
 
     let form = ref({
         id: ''
@@ -28,7 +29,7 @@
 
     const getInvoice = async () => {
         let response = await axios.get(`/api/edit-invoice/${props.id}`);
-        console.log(response.data.invoice);
+        //console.log(response.data.invoice);
         form.value = response.data.invoice;
     }
 
@@ -57,6 +58,64 @@
         let response = await axios.get('/api/products');
         //console.log('Products - ', response.data.products);
         listProducts.value = response.data.products;
+    }
+
+    const addCart = (item) => {
+
+        const itemcart = {
+            product_id : item.id,
+            item_code : item.item_code,
+            description : item.description,
+            unit_price : item.unit_price,
+            quantity : item.quantity,
+        }
+        //listCart.value.push(itemcart);
+        form.value.invoice_items.push(itemcart);
+        closeModal();
+    }
+
+    const  SubTotal = () => {
+        let total = 0;
+        if (form.value.invoice_items) {
+            form.value.invoice_items.map((item) => {
+                total = total + item.unit_price*item.quantity;
+            });
+        }
+        return total;
+    }
+
+    const Total = () => {
+        if (form.value.invoice_items) {
+            return SubTotal() - form.value.discount;
+        }
+    }
+
+    const onSave = () => {
+        if (form.value.invoice_items.length >= 1) {
+            //alert(JSON.stringify(form.value.invoice_items));
+            let subtotal = 0;
+            subtotal = SubTotal();
+
+            let total = 0;
+            total = Total();
+
+            const formData = {} //new FormData(); formData.append() not work. xz?.
+            formData.invoice_items = JSON.stringify(form.value.invoice_items);
+            formData.customer_id = form.value.customer_id;
+            formData.date = form.value.date;
+            formData.due_date = form.value.due_date;
+            formData.number = form.value.number;
+            formData.reference = form.value.reference;
+            formData.discount = form.value.discount;
+            formData.subtotal = subtotal;
+            formData.total = total;
+            formData.terms_and_conditions = form.value.terms_and_conditions;
+            //console.log(formData);
+
+            axios.post(`/api/update-invoice/${form.value.id}`, formData);
+            form.value.invoice_items = [];
+            router.push('/');
+        }
     }
 
 
@@ -144,15 +203,15 @@
                     <div>
                         <div class="table__footer--subtotal">
                             <p>Sub Total</p>
-                            <span>$ 1000</span>
+                            <span>$ {{ SubTotal() ? SubTotal() : '' }}</span>
                         </div>
                         <div class="table__footer--discount">
                             <p>Discount</p>
-                            <input type="text" class="input">
+                            <input type="text" class="input" v-model="form.discount">
                         </div>
                         <div class="table__footer--total">
                             <p>Grand Total</p>
-                            <span>$ 1200</span>
+                            <span>$ {{ Total() ? Total() : '' }}</span>
                         </div>
                     </div>
                 </div>
@@ -164,7 +223,7 @@
 
                 </div>
                 <div>
-                    <a class="btn btn-secondary">
+                    <a class="btn btn-secondary" @click="onSave(form.id)">
                         Save
                     </a>
                 </div>
