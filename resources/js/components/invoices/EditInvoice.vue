@@ -110,7 +110,8 @@
             formData.subtotal = subtotal;
             formData.total = total;
             formData.terms_and_conditions = form.value.terms_and_conditions;
-            //console.log(formData);
+            //console.log('formData',formData);
+            //console.log('id', form.value.id);
 
             axios.post(`/api/update-invoice/${form.value.id}`, formData);
             form.value.invoice_items = [];
@@ -223,7 +224,8 @@
 
                 </div>
                 <div>
-                    <a class="btn btn-secondary" @click="onSave(form.id)">
+                    <!--<a class="btn btn-secondary" @click="onSave(form.id)">-->
+                    <a class="btn btn-secondary" @click="onSave()">
                         Save
                     </a>
                 </div>

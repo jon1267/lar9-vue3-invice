@@ -7,7 +7,7 @@
     let form = ref([]);
     let allCustomers = ref([]);
     let customer_id = ref([]);
-    let item = ref([]);
+    //let item = ref([]);
     let listCart = ref([]);
     const showModal = ref(false);
     const hideModal = ref(true);

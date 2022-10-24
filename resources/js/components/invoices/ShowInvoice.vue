@@ -29,7 +29,7 @@
     }
 
     const onEdit = (id) => {
-        console.log(id);
+        //console.log(id);
         router.push(`/invoice/edit/${id}`)
     }
 

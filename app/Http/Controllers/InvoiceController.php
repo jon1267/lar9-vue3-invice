@@ -118,21 +118,19 @@ class InvoiceController extends Controller
     {
         $invoice = Invoice::where('id', $id)->first();
 
-        $data['sub_total'] = $request->subtotal;
-        $data['total'] = $request->total;
-        $data['customer_id'] = $request->customer_id;
-        $data['number'] = $request->number;
-        $data['date'] = $request->date;
-        $data['due_date'] = $request->due_date;
-        $data['discount'] = $request->discount;
-        $data['reference'] = $request->reference;
-        $data['terms_and_conditions'] = $request->terms_and_conditions;
+        $invoiceData['sub_total'] = $request->subtotal;
+        $invoiceData['total'] = $request->total;
+        $invoiceData['customer_id'] = $request->customer_id;
+        $invoiceData['number'] = $request->number;
+        $invoiceData['date'] = $request->date;
+        $invoiceData['due_date'] = $request->due_date;
+        $invoiceData['discount'] = $request->discount;
+        $invoiceData['reference'] = $request->reference;
+        $invoiceData['terms_and_conditions'] = $request->terms_and_conditions;
 
-        //response()->json(['id' => $id, 'request' => $request], 201);
+        $invoice->update($invoiceData);
 
-        $invoice->update($data);
-
-        $invoiceItem = $request->invoive_items;
+        $invoiceItem = $request->invoice_items;
 
         $invoice->invoice_items()->delete();
 
@@ -145,6 +143,8 @@ class InvoiceController extends Controller
 
             InvoiceItem::create($itemData);
         }
+
+        return response()->json($invoice, 201); // ?
     }
 
 }
