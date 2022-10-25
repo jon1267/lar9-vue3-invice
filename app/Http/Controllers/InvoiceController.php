@@ -147,4 +147,11 @@ class InvoiceController extends Controller
         return response()->json($invoice, 201); // ?
     }
 
+    public function deleteInvoice($id)
+    {
+        $invoice = Invoice::findOrFail($id); //return response()->json($invoice, 200);
+        $invoice->invoice_items()->delete();
+        $invoice->delete();
+    }
+
 }
