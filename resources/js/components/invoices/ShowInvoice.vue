@@ -38,6 +38,8 @@
         router.push('/');
     }
 
+    const onReturnBack = () => { router.push('/') }
+
 </script>
 
 <template>
@@ -82,6 +84,17 @@
                             <button class="selectBtnFlat " @click="onDelete(form.id)">
                                 <i class=" fas fa-pencil-alt"></i>
                                 Delete
+                            </button>
+                            <!-- End Select Btn Option -->
+                        </li>
+
+                        <li>
+                            <!-- Select Btn Option -->
+                            <button class="selectBtnFlat"
+                                    title="return to invoices list"
+                                    @click="onReturnBack()"
+                            >
+                                &times;
                             </button>
                             <!-- End Select Btn Option -->
                         </li>

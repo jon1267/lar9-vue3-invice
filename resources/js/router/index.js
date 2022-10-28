@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router'; //
 
 import InvoiceIndex from '../components/invoices/index.vue';
 import NewInvoice   from '../components/invoices/NewInvoice.vue';
@@ -32,7 +32,8 @@ const routes = [
 ];
 
 const router = createRouter({
-    history: createWebHistory('/'), //history: createWebHashHistory(process.env.BASE_URL),//error on process.env.BASE_URL
+    //history: createWebHashHistory(process.env.BASE_URL), //error on process.env.BASE_URL
+    history: createWebHistory('/'),
     routes,
 });
 
